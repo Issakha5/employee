@@ -1,6 +1,10 @@
 from django.shortcuts import render, redirect
 from .models import Employee
 from .forms import EmployeeForm
+from rest_framework import permissions
+from rest_framework import viewsets
+from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView
+from .serializers import EmployeeSerializer
 
 
 def employees_list(request):
@@ -54,3 +58,14 @@ def delete_employee(request, pk):
         'employee': employee,
     }
     return render(request, 'employee/delete.html', context)
+
+class EmployeeList(ListCreateAPIView):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeSerializer
+    permission_classes = (permissions.AllowAny, )
+
+
+class EmployeeDetail(RetrieveUpdateDestroyAPIView):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeSerializer
+    permission_classes = (permissions.AllowAny, )
